@@ -1,0 +1,17 @@
+* {
+    box-sizing: border-box;
+}
+
+#placeForLetters {
+    display: flex;
+    gap: 5px;
+
+}
+
+.letterBox {
+    border-bottom: 1px solid black;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    font-size: 30px;
+}

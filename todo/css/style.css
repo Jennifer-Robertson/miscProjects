@@ -1,0 +1,144 @@
+/******************************************
+/* CSS
+/*******************************************/
+
+/* Box Model Hack */
+*{
+    box-sizing: border-box;
+  }
+  
+  /******************************************
+  /* LAYOUT
+  /*******************************************/
+  html {
+      font-size: 62.5%;;
+      text-align: center;
+      background: rgb(245, 255, 244);
+  }
+  
+  body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: 'Gideon Roman', cursive;
+  }
+  .delete {
+      display: none;
+  }
+
+  .done {
+    background-color: #f5f186;
+    background-image: linear-gradient(315deg, rgb(159, 207, 153) 0%, rgb(195, 255, 188) 74%);
+
+  }
+
+  .headerContainer {
+      background-image: url("leaves.png");
+      height: 300px;
+      width: 100%;
+      border-bottom: 12px solid rgb(187, 204, 185);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10%;
+
+  }
+
+  
+  .headerContainer div {
+      font-size: 2rem;
+      background: white;
+      border: 3px solid rgb(187, 204, 185);
+      border-radius: 5%;
+      width: 60%;
+      min-width: 500px;
+      padding: 2%;
+  }
+
+  h1 {
+      font-size: 5rem;
+      padding-bottom: 30px;
+  }
+
+  #enter, form {
+      display: inline-block;
+      margin-top: 100px;
+  }
+
+  #enter {
+    border: none;
+	padding: 3px 15px;
+	border-radius: 5px;
+	color: #04A1BF;
+	background-color: rgb(187, 204, 185);
+    width: 50px;
+  }
+
+  #enter:hover {
+      background-color: rgb(196, 214, 194);
+      
+  }
+
+  .inputTasks{
+      width: 50%;
+      min-width: 190px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+  }
+form {
+    width: 40%;
+}
+  input {
+	border-radius: 5px;
+	min-width: 100%;
+	padding: 5px;
+    border: 3px solid rgb(187, 204, 185);
+}
+button img, a img {
+    width: 100%;
+    height: 20px;
+
+}
+ul li  {
+    background-color: #ff4e00;
+    background-image: linear-gradient(315deg, #ff4e00 0%, #ec9f05 74%);
+    color: white;
+    margin: 5px auto;
+    padding: 10px 15px;
+    font-size: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 15px;
+}
+
+li button {
+    border:none;
+    width: 30px;
+}
+
+ul {
+    width: 100%;
+}
+
+.listContainer {
+    width: 40%;
+}
+  /******************************************
+  /* ADDITIONAL STYLES
+  /*******************************************/
+  @media all and (max-width: 900px) {
+    .inputTasks {
+        flex-direction: column;
+        justify-items: center;
+    }
+    #enter, form {
+        margin-top: 5px;
+        width: 100%;
+    }
+    #enter img {
+        width: 25px;
+    }
+  }

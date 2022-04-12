@@ -1,0 +1,26 @@
+html {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 62.5%;
+    text-align: center;
+}
+h1 {
+    font-size: 3rem;
+}
+
+section {
+    font-size: 2rem;
+}
+
+.guess-row, .random-row {
+    display: flex;
+    gap: 5px;
+}
+.word-box, .rand-box {
+    border: 1px solid black;
+    width: 50px;
+    height: 50px;
+}
+
