@@ -7,13 +7,13 @@ import {
 
 
 let currentGuess = [];
-let currentIndexes = [];
-let correctSentence;
+let correctSentence = pickSentence(WORDS5);
+
 
 //creates empty guess boxes and populates shuffled words in guess boxes
 function initBoard() {
 
-    let randomSentence = pickRandomSentence(WORDS6)
+    let randomSentence = randomizeSentence(correctSentence)
     let placeForUserGuess = document.getElementById("placeForUserGuess");
     let guessRow = document.createElement("div");
     guessRow.className = "guess-row";
@@ -26,16 +26,16 @@ function initBoard() {
 
     for (let i = 0; i < randomSentence.length; i++) {
         let box = document.createElement("div");
+        box.className = "word-box";
         guessRow.appendChild(box);
         
 
         let randBox = document.createElement("div");
         randBox.className = "rand-box";
-        randBox.className = "word-box";
         randBox.innerText = randomSentence[i];
         const word = randomSentence[i];
         randBox.addEventListener("click", () => {
-          insertWord(word);
+          collectUserGuess(word);
         })
         randomRow.appendChild(randBox);
 
@@ -45,15 +45,17 @@ function initBoard() {
 
 
 }
-//returns a random, shuffled sentence array
-function pickRandomSentence(arr) {
+//returns a random sentence array
+function pickSentence(arr) {
   const randomNumber = Math.floor(Math.random()*arr.length);
-  correctSentence = WORDS6[randomNumber].split(" ");
-  const randomSentence = shuffle(correctSentence);
+  const sentence = arr[randomNumber].split(" ");
+  return sentence
+}
+//returns a shuffled sentence array
+function randomizeSentence(arr){
+  const randomSentence = shuffle(arr);
   return randomSentence;
 }
-
-
 
 //shuffles array
 
@@ -76,24 +78,30 @@ function shuffle(array) {
   
     return copy;
   }
+//puts user guess in an array
+function collectUserGuess(word) {
+    if(!currentGuess.includes(word)) {
+      currentGuess.push(word)
+      console.log(currentGuess)
+    }
+    let wordBox = Array.from(document.querySelectorAll(".word-box"))
+    currentGuess.forEach((guess, i) => {
+      wordBox[i].innerText = guess;
 
-function insertWord(word) {
-
-    const userGuess = word;
-
-    // if(!currentGuess.includes(word) && (!currentIndexes.includes(correctSentence.indexOf(word)))) {
-    //   currentGuess.push(word)
-    //   currentIndexes.push(correctSentence.indexOf(word))
-    //   console.log(currentIndexes)
-    // }
-    
-
-
-
-}
-
-function checkWordLocation(word, correctSentence) {
-
+    })
+    if(currentGuess.length==correctSentence.length) {
+      checkGuess(currentGuess, correctSentence)
+    }
+  }
+//checks user guess against correct guess
+function checkGuess(guess, sentence) {
+  for(let i=0; i<guess.length; i++) {
+    console.log(guess[i])
+      console.log(sentence[i])
+    if(guess[i] == sentence[i]) {
+      console.log(correct)
+    }
+  }
 }
 
 
