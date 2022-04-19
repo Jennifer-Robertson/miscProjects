@@ -5,27 +5,38 @@ import {
     WORDS6
 } from "./sentences.js";
 
-let sentenceLength = 6;
-let currentGuess = [];
-let nextWord = 0;
 
+let currentGuess = [];
+let currentIndexes = [];
+let correctSentence;
+
+//creates empty guess boxes and populates shuffled words in guess boxes
 function initBoard() {
+
+    let randomSentence = pickRandomSentence(WORDS6)
     let placeForUserGuess = document.getElementById("placeForUserGuess");
     let guessRow = document.createElement("div");
     guessRow.className = "guess-row";
 
     let placeForRandomWords = document.getElementById("placeForWords");
     let randomRow = document.createElement("div");
+
     randomRow.className = "random-row";
 
-    for (let i = 0; i < sentenceLength; i++) {
+
+    for (let i = 0; i < randomSentence.length; i++) {
         let box = document.createElement("div");
-        box.className = "word-box";
-        box.innerText = WORDS6[0].split(" ")[i];
         guessRow.appendChild(box);
+        
 
         let randBox = document.createElement("div");
         randBox.className = "rand-box";
+        randBox.className = "word-box";
+        randBox.innerText = randomSentence[i];
+        const word = randomSentence[i];
+        randBox.addEventListener("click", () => {
+          insertWord(word);
+        })
         randomRow.appendChild(randBox);
 
         placeForUserGuess.appendChild(guessRow);
@@ -34,6 +45,16 @@ function initBoard() {
 
 
 }
+//returns a random, shuffled sentence array
+function pickRandomSentence(arr) {
+  const randomNumber = Math.floor(Math.random()*arr.length);
+  correctSentence = WORDS6[randomNumber].split(" ");
+  const randomSentence = shuffle(correctSentence);
+  return randomSentence;
+}
+
+
+
 //shuffles array
 
 function shuffle(array) {
@@ -56,21 +77,26 @@ function shuffle(array) {
     return copy;
   }
 
-function placeRandomWords() {
+function insertWord(word) {
+
+    const userGuess = word;
+
+    // if(!currentGuess.includes(word) && (!currentIndexes.includes(correctSentence.indexOf(word)))) {
+    //   currentGuess.push(word)
+    //   currentIndexes.push(correctSentence.indexOf(word))
+    //   console.log(currentIndexes)
+    // }
+    
 
 
 
 }
 
-console.log(randArray())
-function insertWord() {
-    let guessRow = document.getElementsByClassName("guess-row");
-    let box = guessRow.children[nextWord]
-    box.textContent = pressedKey;
-    box.classList.add("filled-box");
-    currentGuess.push(pressedKey);
-    nextWord += 1;
+function checkWordLocation(word, correctSentence) {
+
 }
+
+
 
 initBoard()
 
