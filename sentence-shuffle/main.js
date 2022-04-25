@@ -6,107 +6,173 @@ import {
 } from "./sentences.js";
 
 
-let currentGuess = [];
-let correctSentence = pickSentence(WORDS5);
 
+
+
+// function displayRadioValue() {
+//   let num = document.getElementsByName('number');
+    
+//   for(let i = 0; i < num.length; i++) {
+//       if(num[i].checked) {
+//      console.log(num[i].value)
+//       }
+
+//   }
+// }
+// displayRadioValue()
 
 //creates empty guess boxes and populates shuffled words in guess boxes
+function playGame(numOfWords) {
+
+let correctSentence = [];
+let currentGuess = [];
+let sentenceLength;
+let attemptNumber=0;
+
+pickSentence(WORDS5)
+initBoard()
+
 function initBoard() {
-
+  if(correctSentence.length == 0) {
+    pickSentence(WORDS5)
+  }
     let randomSentence = randomizeSentence(correctSentence)
-    let placeForUserGuess = document.getElementById("placeForUserGuess");
-    let guessRow = document.createElement("div");
-    guessRow.className = "guess-row";
-
-    let placeForRandomWords = document.getElementById("placeForWords");
-    let randomRow = document.createElement("div");
-
-    randomRow.className = "random-row";
-
-
-    for (let i = 0; i < randomSentence.length; i++) {
-        let box = document.createElement("div");
-        box.className = "word-box";
-        guessRow.appendChild(box);
-        
-
-        let randBox = document.createElement("div");
-        randBox.className = "rand-box";
-        randBox.innerText = randomSentence[i];
-        const word = randomSentence[i];
-        randBox.addEventListener("click", () => {
-          collectUserGuess(word);
-        })
-        randomRow.appendChild(randBox);
-
-        placeForUserGuess.appendChild(guessRow);
-        placeForRandomWords.appendChild(randomRow);
-    }
-
-
+    makeUserGuessBoxes(sentenceLength)
+    
+    makeShuffleSentenceBoxes(randomSentence)
+  //populating the boxes for both the words and guesses
 }
+
+//creates the boxes for the shuffled sentence words to appear in
+function makeShuffleSentenceBoxes(randomSentence) {
+  let placeForRandomWords = document.getElementById("placeForWords");
+  let randomRow = document.createElement("div");
+  randomRow.className = "random-row";
+
+  for (let i = 0; i < randomSentence.length; i++) {     
+
+    let randBox = document.createElement("div");
+    randBox.className = "rand-box";
+    randBox.innerText = randomSentence[i];
+    const word = randomSentence[i];
+    randBox.addEventListener("click", () => {
+      collectUserGuess(word, correctSentence);
+    })
+    randomRow.appendChild(randBox);
+    placeForRandomWords.appendChild(randomRow);
+}
+}
+
+//creates the boxes for the user guesses to appear in
+function makeUserGuessBoxes(sentenceLength) {
+  let placeForUserGuess = document.getElementById("placeForUserGuess");
+  let guessRow = document.createElement("div");
+  guessRow.className = "guess-row";
+
+  for (let i = 0; i < sentenceLength; i++) {
+    let box = document.createElement("div");
+    box.className = "word-box";
+    guessRow.appendChild(box);
+    placeForUserGuess.appendChild(guessRow);
+
+}  
+}
+
 //returns a random sentence array
 function pickSentence(arr) {
   const randomNumber = Math.floor(Math.random()*arr.length);
-  const sentence = arr[randomNumber].split(" ");
-  return sentence
+  correctSentence = arr[randomNumber].split(" ");
+  sentenceLength = correctSentence.length;
 }
 //returns a shuffled sentence array
 function randomizeSentence(arr){
-  const randomSentence = shuffle(arr);
-  return randomSentence;
+  let randomSentence = arr.slice(0);
+  randomSentence.sort(() => Math.random() - 0.5)
+  checkForDup(arr, randomSentence)  
+  return randomSentence
 }
 
-//shuffles array
-
-function shuffle(array) {
-    var copy = [], n = array.length, i;
-  
-    // While there remain elements to shuffle…
-    while (n) {
-  
-      // Pick a remaining element…
-      i = Math.floor(Math.random() * array.length);
-  
-      // If not already shuffled, move it to the new array.
-      if (i in array) {
-        copy.push(array[i]);
-        delete array[i];
-        n--;
-      }
+//checks to make sure the sentence is shuffled
+function checkForDup(arr, random) {
+  let count = 0;
+  for(let i = 0; i < arr.length; i++) {
+    if(arr[i]==random[i]) {
+      count++
     }
-  
-    return copy;
   }
+  if(count==arr.length) {
+    randomizeSentence(arr)
+  }
+}
+
 //puts user guess in an array
-function collectUserGuess(word) {
+function collectUserGuess(word, correctSentence) {
     if(!currentGuess.includes(word)) {
       currentGuess.push(word)
-      console.log(currentGuess)
     }
-    let wordBox = Array.from(document.querySelectorAll(".word-box"))
-    currentGuess.forEach((guess, i) => {
-      wordBox[i].innerText = guess;
 
+    let wordBox = Array.from(document.querySelectorAll(".guess-row")[attemptNumber].children);
+
+    currentGuess.forEach((guess, i) => {
+      if(wordBox[i].innerText == ""){
+      wordBox[i].innerText = guess;
+      }
     })
-    if(currentGuess.length==correctSentence.length) {
+    if(currentGuess.length==5) {
       checkGuess(currentGuess, correctSentence)
     }
   }
 //checks user guess against correct guess
-function checkGuess(guess, sentence) {
+function checkGuess(guess, correctSentence) {
+  let rightWords = 0;
+  let wordsInCorrectPosition = [];
   for(let i=0; i<guess.length; i++) {
-    console.log(guess[i])
-      console.log(sentence[i])
-    if(guess[i] == sentence[i]) {
-      console.log(correct)
+    let wordBox = Array.from(document.querySelectorAll(".guess-row")[attemptNumber].children);
+    if(guess[i] == correctSentence[i]) {    
+      wordBox[i].classList.add("correct")  
+      wordsInCorrectPosition.push([guess[i], i])
+      rightWords++
     }
+    if(rightWords == guess.length) {
+      alert("You got the sentence right!")
+    }
+
   }
 }
 
+document.querySelector("#guessAgainBtn").addEventListener("click", guessAgain);
 
+function guessAgain() {
+  attemptNumber++
+  currentGuess = [];
+  makeUserGuessBoxes(sentenceLength)
 
-initBoard()
+}
+
+//restarts the game board
+document.querySelector("#restartBtn").addEventListener("click", restartGame)
+
+function restartGame() {
+
+  correctSentence = [];
+  currentGuess = [];
+  attemptNumber=0;
+
+  let userGuessBoxes = document.querySelector("#placeForUserGuess")
+  let randomWordBoxes = document.querySelector("#placeForWords")
+
+    while(userGuessBoxes.hasChildNodes()) {
+      userGuessBoxes.removeChild(userGuessBoxes.firstChild);
+    }
+
+    while(randomWordBoxes.hasChildNodes()) {
+      randomWordBoxes.removeChild(randomWordBoxes.firstChild);
+    }
+  
+  pickSentence(WORDS5)
+  initBoard()
+}
+}
 
 
 
