@@ -1,25 +1,22 @@
 import {
-    WORDS5
-} from "./sentences.js";
-import {
-    WORDS6
+    WORDS
 } from "./sentences.js";
 
 
-
-
-
-// function displayRadioValue() {
-//   let num = document.getElementsByName('number');
     
-//   for(let i = 0; i < num.length; i++) {
-//       if(num[i].checked) {
-//      console.log(num[i].value)
-//       }
+const radioButtons = Array.from(document.querySelectorAll('input'));
+radioButtons.forEach(button => {
+  button.addEventListener("click", getNumberOfSentences)
+})
+function getNumberOfSentences(){
+  let boxCheck = document.querySelector("#placeForWords");
+  if(boxCheck.hasChildNodes()) {
+    return
+  }
+  playGame(this.value)
+}
 
-//   }
-// }
-// displayRadioValue()
+
 
 //creates empty guess boxes and populates shuffled words in guess boxes
 function playGame(numOfWords) {
@@ -29,19 +26,21 @@ let currentGuess = [];
 let sentenceLength;
 let attemptNumber=0;
 
-pickSentence(WORDS5)
+
+pickSentence(WORDS[numOfWords])
 initBoard()
 
 function initBoard() {
   if(correctSentence.length == 0) {
-    pickSentence(WORDS5)
+    pickSentence(WORDS[numOfWords])
   }
     let randomSentence = randomizeSentence(correctSentence)
     makeUserGuessBoxes(sentenceLength)
     
     makeShuffleSentenceBoxes(randomSentence)
-  //populating the boxes for both the words and guesses
+
 }
+
 
 //creates the boxes for the shuffled sentence words to appear in
 function makeShuffleSentenceBoxes(randomSentence) {
@@ -63,6 +62,7 @@ function makeShuffleSentenceBoxes(randomSentence) {
 }
 }
 
+
 //creates the boxes for the user guesses to appear in
 function makeUserGuessBoxes(sentenceLength) {
   let placeForUserGuess = document.getElementById("placeForUserGuess");
@@ -78,12 +78,15 @@ function makeUserGuessBoxes(sentenceLength) {
 }  
 }
 
+
 //returns a random sentence array
 function pickSentence(arr) {
   const randomNumber = Math.floor(Math.random()*arr.length);
   correctSentence = arr[randomNumber].split(" ");
   sentenceLength = correctSentence.length;
 }
+
+
 //returns a shuffled sentence array
 function randomizeSentence(arr){
   let randomSentence = arr.slice(0);
@@ -92,7 +95,9 @@ function randomizeSentence(arr){
   return randomSentence
 }
 
+
 //checks to make sure the sentence is shuffled
+//DOESN"T WORK!!!
 function checkForDup(arr, random) {
   let count = 0;
   for(let i = 0; i < arr.length; i++) {
@@ -105,23 +110,46 @@ function checkForDup(arr, random) {
   }
 }
 
+document.querySelector("#deleteBtn").addEventListener("click", deleteWord)
+
+//deletes the previous user guess
+function deleteWord() {
+  if(currentGuess.length > 0 && currentGuess.length < sentenceLength) {
+    currentGuess.pop();
+    populateGuessBoxes();
+  }
+}
+
+
+//takes the user guesses and puts them in the guess boxes
+function populateGuessBoxes() {
+  let wordBox = Array.from(document.querySelectorAll(".guess-row")[attemptNumber].children);
+
+  wordBox.forEach((box, index) => {
+    if(currentGuess[index]) {
+      box.innerText = currentGuess[index]
+    }
+    else {
+      box.innerText = ""
+    }
+  })
+}
+
+
 //puts user guess in an array
 function collectUserGuess(word, correctSentence) {
     if(!currentGuess.includes(word)) {
       currentGuess.push(word)
     }
+    populateGuessBoxes()
 
-    let wordBox = Array.from(document.querySelectorAll(".guess-row")[attemptNumber].children);
 
-    currentGuess.forEach((guess, i) => {
-      if(wordBox[i].innerText == ""){
-      wordBox[i].innerText = guess;
-      }
-    })
-    if(currentGuess.length==5) {
+    if(currentGuess.length==correctSentence.length) {
       checkGuess(currentGuess, correctSentence)
     }
   }
+
+
 //checks user guess against correct guess
 function checkGuess(guess, correctSentence) {
   let rightWords = 0;
@@ -140,9 +168,14 @@ function checkGuess(guess, correctSentence) {
   }
 }
 
+//creates a new row for the user to guess again
 document.querySelector("#guessAgainBtn").addEventListener("click", guessAgain);
 
 function guessAgain() {
+  if(currentGuess.length < sentenceLength) {
+    return
+  }
+
   attemptNumber++
   currentGuess = [];
   makeUserGuessBoxes(sentenceLength)
@@ -169,7 +202,7 @@ function restartGame() {
       randomWordBoxes.removeChild(randomWordBoxes.firstChild);
     }
   
-  pickSentence(WORDS5)
+  pickSentence(WORDS[numOfWords])
   initBoard()
 }
 }
@@ -207,7 +240,7 @@ function restartGame() {
 
 // var msg = new SpeechSynthesisUtterance();
 // msg.rate = .5; // From 0.1 to 10
-// msg.text = WORDS5[0];
+// msg.text = WORDS[numOfWords][0];
 // speechSynthesis.speak(msg);
 
 // let button1 = document.querySelector("button")
