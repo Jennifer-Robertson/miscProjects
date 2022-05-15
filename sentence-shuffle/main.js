@@ -10,21 +10,31 @@ radioButtons.forEach(button => {
 })
 function getNumberOfSentences(){
   let boxCheck = document.querySelector("#placeForWords");
-  if(boxCheck.hasChildNodes()) {
-    return
-  }
-  playGame(this.value)
+  // if(boxCheck.hasChildNodes()) {
+  //   console.log("top")
+  //   return
+
+  // }
+
+  playGame()
 }
 
 
 
 //creates empty guess boxes and populates shuffled words in guess boxes
-function playGame(numOfWords) {
-
+function playGame() {
+  let numOfWords
+  radioButtons.forEach(button => {
+    if(button.checked){
+      numOfWords = button.value}})
+      console.log(numOfWords)
 let correctSentence = [];
 let currentGuess = [];
+let correctSentenceObj = new Object();
+let currentGuessObj = new Object();
 let sentenceLength;
 let attemptNumber=0;
+
 
 
 pickSentence(WORDS[numOfWords])
@@ -83,6 +93,10 @@ function makeUserGuessBoxes(sentenceLength) {
 function pickSentence(arr) {
   const randomNumber = Math.floor(Math.random()*arr.length);
   correctSentence = arr[randomNumber].split(" ");
+  //creates word objects to keep track of the number of times each word is used
+  correctSentence.forEach(word => correctSentenceObj[word] = 0);
+  correctSentence.forEach(word=> correctSentenceObj[word]++);
+  correctSentence.forEach(word => currentGuessObj[word] = 0);
   sentenceLength = correctSentence.length;
 }
 
@@ -138,7 +152,11 @@ function populateGuessBoxes() {
 
 //puts user guess in an array
 function collectUserGuess(word, correctSentence) {
-    if(!currentGuess.includes(word)) {
+    // if(!currentGuess.includes(word)) {
+    //   currentGuess.push(word)
+    // }
+    if(currentGuessObj[word]<correctSentenceObj[word]){
+      currentGuessObj[word]++
       currentGuess.push(word)
     }
     populateGuessBoxes()
@@ -178,6 +196,7 @@ function guessAgain() {
 
   attemptNumber++
   currentGuess = [];
+  correctSentence.forEach(word => currentGuessObj[word] = 0);
   makeUserGuessBoxes(sentenceLength)
 
 }
@@ -186,7 +205,6 @@ function guessAgain() {
 document.querySelector("#restartBtn").addEventListener("click", restartGame)
 
 function restartGame() {
-
   correctSentence = [];
   currentGuess = [];
   attemptNumber=0;
@@ -205,6 +223,13 @@ function restartGame() {
   pickSentence(WORDS[numOfWords])
   initBoard()
 }
+
+radioButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    numOfWords = button.value;
+    restartGame()
+    })
+})
 }
 
 
