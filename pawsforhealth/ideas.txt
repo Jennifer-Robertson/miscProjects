@@ -1,0 +1,41 @@
+What to track:
+-day
+-weight
+-appetite
+-water intake
+-stool (+consistency, scale)
+-urine
+-comfort?/attutide?/energy?
+-vomiting(+type/amount?)
+
+-sub Qs?
+
+
+blood work results?
+creatinine?
+phos?
+BUN?
+SDMA?
+RBC?
+WBC?
+Urine concentration/uranalysis?
+other?
+
+organize?
+
+username {
+    petName: {
+        petInfo: {
+            species:
+            breed:
+            age:
+        }
+        date: {
+        category1:
+        category2:
+    }
+    }
+}
+
+I want to be able to filter results and either put in
+a table or make graphs?
